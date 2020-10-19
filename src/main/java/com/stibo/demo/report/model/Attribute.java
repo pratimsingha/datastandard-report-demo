@@ -58,5 +58,20 @@ public class Attribute   {
   public void setGroupIds(List<String> groupIds) {
     this.groupIds = groupIds;
   }
+
+  @Override
+  public int hashCode() {
+    return this.getId().hashCode();
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    Attribute attribute = (Attribute) obj;
+    if (this.id.equals(attribute.getId())){
+      return true;
+    }else{
+      return false;
+    }
+  }
 }
 

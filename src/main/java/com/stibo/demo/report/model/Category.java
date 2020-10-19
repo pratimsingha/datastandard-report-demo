@@ -48,5 +48,26 @@ public class Category   {
   public void setAttributeLinks(List<AttributeLink> attributeLinks) {
     this.attributeLinks = attributeLinks;
   }
+
+  @Override
+  public int hashCode() {
+    return this.getId().hashCode();
+    //return super.hashCode();
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    Category category = (Category) obj;
+    if (this.id.equals(category.getId())){
+      return true;
+    }else{
+      return false;
+    }
+
+
+    //return super.equals(obj);
+  }
+
+
 }
 

@@ -28,5 +28,20 @@ public class AttributeGroup {
   public void setDescription(String description) {
     this.description = description;
   }
+
+  @Override
+  public int hashCode() {
+    return this.getId().hashCode();
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    AttributeGroup attributeGroup = (AttributeGroup) obj;
+    if (this.id.equals(attributeGroup.getId())){
+      return true;
+    }else{
+      return false;
+    }
+  }
 }
 

@@ -19,5 +19,20 @@ public class AttributeLink   {
   public void setOptional(Boolean optional) {
     this.optional = optional;
   }
+
+  @Override
+  public int hashCode() {
+    return this.getId().hashCode();
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    AttributeLink attributeLink = (AttributeLink) obj;
+    if (this.id.equals(attributeLink.getId())){
+      return true;
+    }else{
+      return false;
+    }
+  }
 }
 
