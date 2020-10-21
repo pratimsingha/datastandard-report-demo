@@ -13,17 +13,15 @@ import java.util.stream.Stream;
 @Service
 public class ReportService {
     public Stream<Stream<String>> report(Datastandard datastandard, String categoryId) {
-        // TODO: implement
 
         List<List<String>> outerList = new ArrayList<>();
         Category category = new Category();
-        AttributeLink attributeLink = new AttributeLink();
+        //AttributeLink attributeLink = new AttributeLink();
         Attribute attribute = new Attribute();
         Boolean optionalValue = Boolean.TRUE;
         String attributeLinkId = null;
         category.setId(categoryId);
         if (datastandard.getCategories().contains(category)) {
-            //category = datastandard.getCategories().get(category);
             List<Category> result = datastandard.getCategories().stream()
                     .filter(cat -> categoryId.equals(cat.getId()))
                     .collect(Collectors.toList());
@@ -34,30 +32,33 @@ public class ReportService {
             headerList.add("Description");
             headerList.add("Type");
             headerList.add("Groups");
+
             outerList.add(headerList);
             for (int j = 0; j < result.size(); j++) {
                 List<String> innerList = new ArrayList<>();
-                category = datastandard.getCategories().get(datastandard.getCategories().indexOf(category));
+                category = datastandard.getCategories().get(j);
                 innerList.add(category.getName());
+                Attribute attributeN = new Attribute();
                 if (category.getAttributeLinks().size() > 0) {
                     StringBuilder attributeBuilder = new StringBuilder();
                     for (int i = 0; i < category.getAttributeLinks().size(); i++) {
                         attributeLinkId = category.getAttributeLinks().get(i).getId();
                         optionalValue = category.getAttributeLinks().get(i).getOptional();
                         if (attributeLinkId != null) {
-                            attribute.setId(attributeLinkId);
-                            if (datastandard.getAttributes().contains(attribute)) {
-                                attribute = datastandard.getAttributes().get(datastandard.getAttributes().indexOf(attribute));
+
+                            attributeN.setId(attributeLinkId);
+                            if (datastandard.getAttributes().contains(attributeN)) {
+                                attributeN = datastandard.getAttributes().get(datastandard.getAttributes().indexOf(attributeN));
                                 if (optionalValue.equals(Boolean.FALSE)) {
                                     attributeBuilder.append(attributeBuilder)
-                                            .append(attribute.getName())
+                                            .append(attributeN.getName())
                                             .append("*");
                                     innerList.add(attributeBuilder.toString());
                                 } else {
-                                    innerList.add(attribute.getName());
+                                    innerList.add(attributeN.getName());
                                 }
                                 if (attribute.getDescription() != null) {
-                                    innerList.add(attribute.getDescription());
+                                    innerList.add(attributeN.getDescription());
                                 } else {
 
                                     innerList.add("");
@@ -65,161 +66,55 @@ public class ReportService {
                             }
                         }
                     }
-                    innerList.add(type(datastandard, attribute));
+                    innerList.add(type(datastandard, attributeN));
                 }
-                innerList.add(groups(datastandard,attribute));
+                innerList.add(groups(datastandard,attributeN));
                 outerList.add(innerList);
             }
         }
-//            category = datastandard.getCategories().get(datastandard.getCategories().indexOf(category));
-//            innerList.add(category.getName());
-//            if (category.getAttributeLinks().size() > 0) {
-//                StringBuilder attributeBuilder = new StringBuilder();
-//                for (int i = 0; i < category.getAttributeLinks().size(); i++) {
-//                    attributeLinkId = category.getAttributeLinks().get(i).getId();
-//                    optionalValue = category.getAttributeLinks().get(i).getOptional();
-//                    if (attributeLinkId != null) {
-//                        attribute.setId(attributeLinkId);
-//                        if (datastandard.getAttributes().contains(attribute)) {
-//                            attribute = datastandard.getAttributes().get(datastandard.getAttributes().indexOf(attribute));
-//                            if (optionalValue == false) {
-//                                //StringBuilder stringBuilder = new StringBuilder();
-//                                attributeBuilder.append(attributeBuilder)
-//                                        .append(attribute.getName())
-//                                        .append("*");
-//                                innerList.add(attributeBuilder.toString());
-//                            } else {
-//                                innerList.add(attribute.getName());
-//                            }
-//                            if (attribute.getDescription() != null) {
-//                                innerList.add(attribute.getDescription());
-//                            } else {
-//
-//                                innerList.add("");
-//                            }
-//                        }
-//                    }
-//                }
-//                StringBuilder attributeLinksBuilder = new StringBuilder();
-
-
-
-
-                //Type
-//
-//
-//                            //Type
-//                            Boolean multiValue = attribute.getType().getMultiValue();
-//                            List<AttributeLink> attributeLinks = attribute.getAttributeLinks();
-//                            if (attributeLinks.size() > 0) {
-//                                StringBuilder stringBuilder = new StringBuilder();
-//                                for (AttributeLink a : attributeLinks) {
-//                                    String tempAttLink = a.getId();
-//                                    Attribute attribute1 = new Attribute();
-//                                    attribute1.setId(tempAttLink);
-//                                    if (datastandard.getAttributes().contains(attribute1)) {
-//                                        attribute1 = datastandard.getAttributes().get(datastandard.getAttributes().indexOf(attribute1));
-//                                        if (a.getOptional().equals(Boolean.FALSE)) {
-//                                            stringBuilder.append(attribute1.getType().getId())
-//                                                    .append("{\n")
-//                                                    .append(attribute1.getName())
-//                                                    .append("*:  ")
-//                                                    .append(attribute1.getType().getId());
-//                                        }
-//
-//                                    }
-//                                }
-//                            }
-//                            if (multiValue != null && multiValue.equals(Boolean.TRUE)) {
-//                                StringBuilder stringBuilder = new StringBuilder();
-//                                stringBuilder.append(attribute.getType().getId())
-//                                        .append("[]");
-//                                innerList.add(stringBuilder.toString());
-//                            } else {
-//                                innerList.add(attribute.getType().getId());
-//                            }
-//
-//
-//                            //Group
-//                            List<String> groups = attribute.getGroupIds();
-//                            StringBuilder stringBuilder = new StringBuilder();
-//                            for (String group : groups) {
-//                                AttributeGroup attributeGroup = new AttributeGroup();
-//                                attributeGroup.setId(group);
-//                                if (datastandard.getAttributeGroups().contains(attributeGroup)) {
-//                                    attributeGroup = datastandard.getAttributeGroups().get(datastandard.getAttributeGroups().indexOf(attributeGroup));
-//                                    stringBuilder.append(attributeGroup.getName())
-//                                            .append(System.lineSeparator());
-//                                }
-//                            }
-//                            innerList.add(stringBuilder.toString().trim());
-//
-//                        }
-//                    }
-//                }
-
-//            }
-
-
-
         return outerList.stream().map(List::stream);
     }
 
-    public String categoryName(Datastandard datastandard, Category category) {
-        category = datastandard.getCategories().get(datastandard.getCategories().indexOf(category));
-        return category.getName();
-    }
-
-    public String type(Datastandard datastandard, Attribute attribute){
+    private String type(Datastandard datastandard, Attribute attribute){
         StringBuilder stringBuilder = new StringBuilder();
         Boolean multiValue = attribute.getType().getMultiValue();
+        stringBuilder.append(attribute.getType().getId());
         List<AttributeLink> attributeLinks = attribute.getAttributeLinks();
-        Boolean optionalValue = Boolean.TRUE;
-        if (attributeLinks.size() > 0) {
+        if (attributeLinks != null && attributeLinks.size() > 0) {
+            stringBuilder.append("{\n");
             for (AttributeLink a : attributeLinks) {
                 String tempAttLink = a.getId();
                 Attribute attribute1 = new Attribute();
                 attribute1.setId(tempAttLink);
                 if (datastandard.getAttributes().contains(attribute1)) {
                     attribute1 = datastandard.getAttributes().get(datastandard.getAttributes().indexOf(attribute1));
-                    optionalValue = a.getOptional();
                     if (a.getOptional().equals(Boolean.FALSE)) {
-                        stringBuilder.append(attribute.getType().getId())
-                                .append("{\n")
-                                .append(attribute1.getName())
+                        stringBuilder.append(attribute1.getName())
                                 .append("*:  ")
-                                .append(attribute1.getType().getId())
-                                .append("\n}");
+                                .append(attribute1.getType().getId());
                     }else{
                         stringBuilder.append(attribute1.getType().getId())
-                                .append("{\n")
-                                .append(attribute1.getName())
+                                .append("{\n");
+                        stringBuilder.append(attribute1.getName())
                                 .append(":  ")
-                                .append(attribute1.getType().getId())
-                                .append("\n}");
+                                .append(attribute1.getType().getId());
                     }
 
                 }
+                stringBuilder.append("\n");
             }
-
+            stringBuilder.append("}");
         }
-        if (multiValue != null && multiValue.equals(Boolean.TRUE)) {
 
-            stringBuilder
-                    .append(attribute.getType().getId())
-                    .append("[]");
-            //innerList.add(stringBuilder.toString());
-        } else {
-            stringBuilder
-                    .append(attribute.getType().getId());
-            //innerList.add(attribute.getType().getId());
+        if (multiValue != null && multiValue.equals(Boolean.TRUE)) {
+            stringBuilder.append("[]");
         }
 
         return stringBuilder.toString();
 
     }
 
-    public String groups(Datastandard datastandard, Attribute attribute){
+    private String groups(Datastandard datastandard, Attribute attribute){
         //Group
         List<String> groups = attribute.getGroupIds();
         StringBuilder stringBuilder = new StringBuilder();
